@@ -1514,13 +1514,13 @@ mod json_serde {
 }
 "#;
 
-            // #[test]
-            // fn serialize() {
-            //     let input: ExportLogsServiceRequest = value();
-            //     let actual =
-            //         serde_json::to_string_pretty(&input).expect("serialization must succeed");
-            //     assert_eq!(actual, CANONICAL);
-            // }
+            #[test]
+            fn serialize() {
+                let input: ExportLogsServiceRequest = value();
+                let actual =
+                    serde_json::to_string_pretty(&input).expect("serialization must succeed");
+                assert_eq!(actual, CANONICAL);
+            }
 
             #[test]
             fn deserialize_canonical() {
