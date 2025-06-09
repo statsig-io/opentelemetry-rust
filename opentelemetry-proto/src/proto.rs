@@ -5,7 +5,6 @@
 pub(crate) mod serializers {
     use crate::tonic::common::v1::any_value::{self, Value};
     use crate::tonic::common::v1::AnyValue;
-    use crate::tonic::common::v1::KeyValueList;
     use serde::de::{self, MapAccess, Visitor};
     use serde::ser::{SerializeMap, SerializeSeq, SerializeStruct};
     use serde::{Deserialize, Deserializer, Serialize, Serializer};
