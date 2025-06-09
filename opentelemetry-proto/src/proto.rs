@@ -5,6 +5,7 @@
 pub(crate) mod serializers {
     use crate::tonic::common::v1::any_value::{self, Value};
     use crate::tonic::common::v1::AnyValue;
+    use crate::tonic::common::v1::KeyValueList;
     use serde::de::{self, MapAccess, Visitor};
     use serde::ser::{SerializeMap, SerializeSeq, SerializeStruct};
     use serde::{Deserialize, Deserializer, Serialize, Serializer};
@@ -103,8 +104,10 @@ pub(crate) mod serializers {
                 V: de::MapAccess<'de>,
             {
                 let mut value: Option<any_value::Value> = None;
+                let mut map_size = 0;
 
                 while let Some(key) = map.next_key::<String>()? {
+                    map_size += 1;
                     let key_str = key.as_str();
                     match key_str {
                         "stringValue" => {
@@ -143,9 +146,10 @@ pub(crate) mod serializers {
                         }
                     }
                 }
-
                 if let Some(v) = value {
                     Ok(Some(v))
+                } else if map_size == 0 {
+                    Ok(None)
                 } else {
                     Err(de::Error::custom(
                         "Invalid data for Value, no known keys found",
