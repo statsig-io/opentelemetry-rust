@@ -431,6 +431,13 @@ pub struct HistogramDataPoint {
     /// value must be equal to the sum of the "count" fields in buckets if a
     /// histogram is provided.
     #[prost(fixed64, tag = "4")]
+    #[cfg_attr(
+        feature = "with-serde",
+        serde(
+            serialize_with = "crate::proto::serializers::serialize_u64_to_string",
+            deserialize_with = "crate::proto::serializers::deserialize_string_to_u64"
+        )
+    )]
     pub count: u64,
     /// sum of the values in the population. If count is zero then this field
     /// must be zero.
@@ -452,6 +459,13 @@ pub struct HistogramDataPoint {
     /// is when the length of bucket_counts is 0, then the length of explicit_bounds
     /// must also be 0.
     #[prost(fixed64, repeated, tag = "6")]
+    #[cfg_attr(
+        feature = "with-serde",
+        serde(
+            serialize_with = "crate::proto::serializers::serialize_vec_u64_to_string",
+            deserialize_with = "crate::proto::serializers::deserialize_vec_string_to_vec_u64"
+        )
+    )]
     pub bucket_counts: ::prost::alloc::vec::Vec<u64>,
     /// explicit_bounds specifies buckets with explicitly defined bounds for values.
     ///
