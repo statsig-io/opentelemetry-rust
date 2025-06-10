@@ -169,12 +169,23 @@ pub(crate) mod serializers {
         serializer.serialize_str(&s)
     }
 
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum StringOrNumber {
+        String(String),
+        Number(u64),
+    }
+
     pub fn deserialize_string_to_u64<'de, D>(deserializer: D) -> Result<u64, D::Error>
     where
         D: Deserializer<'de>,
     {
-        let s: String = Deserialize::deserialize(deserializer)?;
-        s.parse::<u64>().map_err(de::Error::custom)
+    
+        let value = StringOrNumber::deserialize(deserializer)?;
+        match value {
+            StringOrNumber::String(s) => s.parse::<u64>().map_err(de::Error::custom),
+            StringOrNumber::Number(n) => Ok(n),
+        }
     }
 
     pub fn serialize_vec_u64_to_string<S>(value: &[u64], serializer: S) -> Result<S::Ok, S::Error>
@@ -195,9 +206,12 @@ pub(crate) mod serializers {
     where
         D: Deserializer<'de>,
     {
-        let s: Vec<String> = Deserialize::deserialize(deserializer)?;
+        let s: Vec<StringOrNumber> = Deserialize::deserialize(deserializer)?;
         s.into_iter()
-            .map(|v| v.parse::<u64>().map_err(de::Error::custom))
+            .map(|v| match v {
+                StringOrNumber::String(s) => s.parse::<u64>().map_err(de::Error::custom),
+                StringOrNumber::Number(n) => Ok(n),
+            })
             .collect()
     }
 
