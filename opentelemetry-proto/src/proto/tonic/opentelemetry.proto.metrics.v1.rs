@@ -715,6 +715,7 @@ pub struct Exemplar {
     /// recorded alongside the original measurement. Only key/value pairs that were
     /// filtered out by the aggregator should be included
     #[prost(message, repeated, tag = "7")]
+    #[cfg_attr(feature = "with-serde", serde(default))]
     pub filtered_attributes: ::prost::alloc::vec::Vec<
         super::super::common::v1::KeyValue,
     >,
@@ -723,6 +724,13 @@ pub struct Exemplar {
     /// Value is UNIX Epoch time in nanoseconds since 00:00:00 UTC on 1 January
     /// 1970.
     #[prost(fixed64, tag = "2")]
+    #[cfg_attr(
+        feature = "with-serde",
+        serde(
+            serialize_with = "crate::proto::serializers::serialize_u64_to_string",
+            deserialize_with = "crate::proto::serializers::deserialize_string_to_u64"
+        )
+    )]
     pub time_unix_nano: u64,
     /// (Optional) Span ID of the exemplar trace.
     /// span_id may be missing if the measurement is not recorded inside a trace

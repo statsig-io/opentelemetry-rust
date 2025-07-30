@@ -54,6 +54,7 @@ pub mod any_value {
 pub struct ArrayValue {
     /// Array of values. The array may be empty (contain 0 elements).
     #[prost(message, repeated, tag = "1")]
+    #[cfg_attr(feature = "with-serde", serde(default))]
     pub values: ::prost::alloc::vec::Vec<AnyValue>,
 }
 /// KeyValueList is a list of KeyValue messages. We need KeyValueList as a message
@@ -71,6 +72,7 @@ pub struct KeyValueList {
     /// The keys MUST be unique (it is not allowed to have more than one
     /// value with the same key).
     #[prost(message, repeated, tag = "1")]
+    #[cfg_attr(feature = "with-serde", serde(default))]
     pub values: ::prost::alloc::vec::Vec<KeyValue>,
 }
 /// KeyValue is a key-value pair that is used to store Span attributes, Link
