@@ -374,6 +374,13 @@ pub mod number_data_point {
     pub enum Value {
         #[prost(double, tag = "4")]
         AsDouble(f64),
+        #[cfg_attr(
+            feature = "with-serde",
+            serde(
+                serialize_with = "crate::proto::serializers::serialize_i64_to_string",
+                deserialize_with = "crate::proto::serializers::deserialize_string_to_i64"
+            )
+        )]
         #[prost(sfixed64, tag = "6")]
         AsInt(i64),
     }
