@@ -28,7 +28,7 @@ jobs:
     
     # TODO - temporarily move main to the shared workers, until we've resolved the instance setup issue
     # runs-on: ${{ github.event_name == 'pull_request' && 'ubuntu-latest' || 'self-hosted' }}
-    runs-on: 'ubuntu-latest'
+    runs-on: 'blacksmith-2vcpu-ubuntu-2404'
     if: ${{ (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'performance')) || github.event_name == 'push' }}
     env:
       # For PRs, compare against the base branch - e.g., 'main'. 

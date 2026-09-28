@@ -8,7 +8,7 @@ on:
     types: [ labeled, synchronize, opened, reopened ]
 jobs:
   semver-compliance: # This job uses the latest published crate as baseline for comparison.
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 10
     if: ${{ github.event.label.name == 'semver-check' || contains(github.event.pull_request.labels.*.name, 'semver-check') }}
     steps:

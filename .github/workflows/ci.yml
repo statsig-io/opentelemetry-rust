@@ -28,7 +28,7 @@ jobs:
             os: macos-latest
           - rust: stable
             os: ubuntu-22.04-arm
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ fromJSON('{"ubuntu-latest":"blacksmith-2vcpu-ubuntu-2404","windows-latest":"blacksmith-2vcpu-windows-2025","macos-latest":"blacksmith-6vcpu-macos-latest","ubuntu-22.04-arm":"blacksmith-4vcpu-ubuntu-2204-arm"}')[matrix.os] }}
     continue-on-error: ${{ matrix.rust == 'beta' }}
     steps:
     - name: Harden the runner (Audit all outbound calls)
@@ -58,7 +58,7 @@ jobs:
     - name: Test
       run: bash ./scripts/test.sh
   lint:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     steps:
     - name: Harden the runner (Audit all outbound calls)
       uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # v2.12.0
@@ -86,7 +86,7 @@ jobs:
     strategy:
       matrix:
         member: [opentelemetry, opentelemetry-sdk, opentelemetry-otlp, opentelemetry-zipkin]
-    runs-on: ubuntu-latest # TODO: Check if this could be covered for Windows. The step used currently fails on Windows.
+    runs-on: blacksmith-2vcpu-ubuntu-2404 # TODO: Check if this could be covered for Windows. The step used currently fails on Windows.
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # v2.12.0
@@ -110,7 +110,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ fromJSON('{"windows-latest":"blacksmith-2vcpu-windows-2025","ubuntu-latest":"blacksmith-2vcpu-ubuntu-2404"}')[matrix.os] }}
     continue-on-error: true
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -133,7 +133,7 @@ jobs:
       - name: Check MSRV for all crates
         run: bash ./scripts/msrv.sh
   cargo-deny:
-    runs-on: ubuntu-latest # This uses the step `EmbarkStudios/cargo-deny-action@v1` which is only supported on Linux
+    runs-on: blacksmith-2vcpu-ubuntu-2404 # This uses the step `EmbarkStudios/cargo-deny-action@v1` which is only supported on Linux
     continue-on-error: true # Prevent sudden announcement of a new advisory from failing ci
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -165,7 +165,7 @@ jobs:
 
   docs:
     continue-on-error: true
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # v2.12.0
@@ -187,7 +187,7 @@ jobs:
           RUSTDOCFLAGS: -Dwarnings
   coverage:
     continue-on-error: true
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     if: ${{ ! contains(github.event.pull_request.labels.*.name, 'dependencies') }}
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -221,7 +221,7 @@ jobs:
         with:
           fail_ci_if_error: true
   build-examples:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: dtolnay/rust-toolchain@b3b07ba8b418998c39fb20f53e8b695cdcc8de1b # stable
@@ -241,7 +241,7 @@ jobs:
           done
   cargo-machete:
     continue-on-error: true
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # v2.12.0
